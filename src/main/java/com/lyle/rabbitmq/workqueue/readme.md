@@ -1,29 +1,36 @@
->simple缺点  
+>simple缺点
+
  simple队列是一一对应的，实际生产中生产者发送消息非常容易，但是消费者一般跟业务结合，处理比较慢，这时候队列中会积压很多消息，所以需要多个消费者一起处理。
->默认是轮询分发  
+>默认是轮询分发
+
 channel.basicQos(1) 公平分发，一次只发一个
->autoAck  
+>autoAck
+
 一旦rabbitmq将消息分发给消费者，就会从内存中删除，如果杀死正在执行的消费者，就会丢失正在处理的消息
 手动模式：如果有一个消费者挂掉，就会交给其他消费者，消费者发送一个应答告诉rabbitmq这个消息我已经处理完成，你可以删除，之后内存中就被删除。
 
-rabbitmq不允许重新定义（不同参数）一个已经存在的队列
+>rabbitmq不允许重新定义（不同参数）一个已经存在的队列
 
-订阅模式：
+>订阅模式：
+
 1. 一个生产者，多个消费者
 2. 每一个消费者都有自己的队列
 3. 生产者没有直接把消息发送到队列，而是发送到交换机
 4. 每个队列都要绑定到交换机上
 
-交换机没有存储能力，rabbitmq中只有队列有存储能力。
+>交换机没有存储能力，rabbitmq中只有队列有存储能力。
 
-rabbitmq的消息确认机制(事务+confirm)  
+>rabbitmq的消息确认机制(事务+confirm)
+
 	生产者将消息发送出去之后，消息到底有没有到达rabbitmq服务器，默认是不知道的。  
 		两种方式：  
 			AMQP协议实现了事务机制  
 			confirm模式  
-事务机制：  
-	txSelect:将当前channel设置成transaction模式  
-	txCommit:提交事务  
-	txRollback:回滚事务  
-confirm原理：
+>事务机制：  
+
+	1. txSelect:将当前channel设置成transaction模式  
+	2. txCommit:提交事务  
+	3. txRollback:回滚事务  
+
+>confirm原理：
 	
