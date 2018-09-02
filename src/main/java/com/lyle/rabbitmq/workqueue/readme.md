@@ -20,31 +20,13 @@ rabbitmq不允许重新定义（不同参数）一个已经存在的队列
 交换机没有存储能力，rabbitmq中只有队列有存储能力。
 
 rabbitmq的消息确认机制(事务+confirm)  
-	生产者将消息发送出去之后，消息到底有没有到达rabbitmq服务器，默认是不知道的。
-		两种方式：
-			AMQP协议实现了事务机制
-			confirm模式
-事务机制：
-	txSelect:将当前channel设置成transaction模式
-	txCommit:提交事务
-	txRollback:回滚事务				
-
+	生产者将消息发送出去之后，消息到底有没有到达rabbitmq服务器，默认是不知道的。  
+		两种方式：  
+			AMQP协议实现了事务机制  
+			confirm模式  
+事务机制：  
+	txSelect:将当前channel设置成transaction模式  
+	txCommit:提交事务  
+	txRollback:回滚事务  
 confirm原理：
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
