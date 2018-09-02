@@ -1,4 +1,4 @@
-package com.lyle.rabbitmq.workqueue;
+package com.lyle.rabbitmq.tx;
 
 import java.io.IOException;
 
@@ -7,20 +7,19 @@ import com.lyle.rabbitmq.util.ConnectionUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
-public class Sender {
+public class TxSend {
 
 	public static void main(String[] args) throws IOException {
-		// 获取链接
 		Connection connect = ConnectionUtil.getConnection();
-		// 创建通道
 		Channel channel = connect.createChannel();
-		// 声明队列
-		channel.queueDeclare(QueueConstant.workqueuename, false, false, false, null);
-		for (int i = 0; i < 50; i++) {
-			// 发送内容
-			channel.basicPublish("", QueueConstant.workqueuename, null, ("余额不足" + i).getBytes());
+		channel.queueDeclare(QueueConstant.txQueuename, false, false, false, null);
+		try {
+			channel.txSelect();// 开启事务模式
+			channel.basicPublish("", QueueConstant.txQueuename, null, "事务模式消息".getBytes());
+			channel.txCommit();
+		} catch (Exception e) {
+			channel.txRollback();
 		}
-		// 关闭连接
 		channel.close();
 		connect.close();
 	}

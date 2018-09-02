@@ -1,4 +1,4 @@
-package com.lyle.rabbitmq.helloworld;
+package com.lyle.rabbitmq.simple;
 
 import java.io.IOException;
 
@@ -14,9 +14,9 @@ public class Sender {
 		// 创建通道
 		Channel channel = connect.createChannel();
 		// 声明队列
-		channel.queueDeclare(QueueConstant.queuename, false, false, false, null);
+		channel.queueDeclare(QueueConstant.simplequeuename, false, false, false, null);
 		// 发送内容
-		channel.basicPublish("", QueueConstant.queuename, null, "余额不足".getBytes());
+		channel.basicPublish("", QueueConstant.simplequeuename, null, "余额不足".getBytes());
 		// 关闭连接
 		channel.close();
 		connect.close();

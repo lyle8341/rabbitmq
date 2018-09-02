@@ -2,7 +2,7 @@ package com.lyle.rabbitmq.workqueue;
 
 import java.io.IOException;
 
-import com.lyle.rabbitmq.helloworld.QueueConstant;
+import com.lyle.rabbitmq.simple.QueueConstant;
 import com.lyle.rabbitmq.util.ConnectionUtil;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
@@ -18,8 +18,8 @@ public class Receiver2 {
 			throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
 		Connection connect = ConnectionUtil.getConnection();
 		Channel channel = connect.createChannel();
-		channel.queueDeclare(QueueConstant.queuename, false, false, false, null);
-		// 告诉服务器，在我没有确认当前消息完成之前不要再给我分配新的消息
+		channel.queueDeclare(QueueConstant.workqueuename, false, false, false, null);
+		// 每个消费者发送确认消息之前，消息队列不发送下一个消息到消费者，一次只处理一个消息
 		channel.basicQos(1);
 		DefaultConsumer consumer = new DefaultConsumer(channel) {
 
@@ -36,6 +36,6 @@ public class Receiver2 {
 				channel.basicAck(envelope.getDeliveryTag(), false);
 			}
 		};
-		channel.basicConsume(QueueConstant.queuename, false, consumer);
+		channel.basicConsume(QueueConstant.workqueuename, false, consumer);
 	}
 }
